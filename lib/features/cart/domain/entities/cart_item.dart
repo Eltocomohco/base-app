@@ -1,16 +1,34 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../menu/domain/entities/product.dart';
 
-part 'cart_item.freezed.dart';
+class CartItem {
+  final Product product;
+  final int quantity;
 
-@freezed
-abstract class CartItem with _$CartItem {
-  const factory CartItem({
-    required Product product,
-    required int quantity,
-  }) = _CartItem;
-
-  const CartItem._();
+  const CartItem({
+    required this.product,
+    required this.quantity,
+  });
 
   double get totalPrice => product.price * quantity;
+
+  CartItem copyWith({
+    Product? product,
+    int? quantity,
+  }) {
+    return CartItem(
+      product: product ?? this.product,
+      quantity: quantity ?? this.quantity,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is CartItem &&
+        other.product == product &&
+        other.quantity == quantity;
+  }
+
+  @override
+  int get hashCode => product.hashCode ^ quantity.hashCode;
 }

@@ -18,7 +18,7 @@ void main() async {
     // Seed Firestore on first launch
     await seedFirestore();
   } catch (e) {
-    debugPrint("Firebase init failed: $e");
+    debugPrint('Firebase init failed: $e');
   }
 
   runApp(const ProviderScope(child: PizzeriaPepeApp()));

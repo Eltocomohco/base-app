@@ -19,10 +19,10 @@ class CategorySelector extends ConsumerWidget {
           scrollDirection: Axis.horizontal,
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           itemCount: categories.length,
-          separatorBuilder: (_, __) => SizedBox(width: 12.w),
+          separatorBuilder: (context, index) => SizedBox(width: 12.w),
           itemBuilder: (context, index) {
             final category = categories[index];
-            final isSelected = category.isSelected; // Logic to handle selection state later
+            final isSelected = category.isSelected;
 
             return FilterChip(
               label: Text(category.name),

@@ -18,13 +18,13 @@ class MyAddressesScreen extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.all(16.r),
         children: [
-          _AddressCard(
+          const _AddressCard(
             title: 'Casa',
             address: 'Calle Mayor, 12, 3ºA',
             isDefault: true,
           ),
           SizedBox(height: 16.h),
-          _AddressCard(
+          const _AddressCard(
             title: 'Trabajo',
             address: 'Av. de la Innovación, 5, Oficina 202',
             isDefault: false,

@@ -12,7 +12,7 @@ class CartScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cartItems = ref.watch(cartProvider);
-    final total = ref.watch(cartTotalProvider);
+    final total = ref.read(cartProvider.notifier).subtotal;
 
     return Scaffold(
       appBar: AppBar(
@@ -35,19 +35,21 @@ class CartScreen extends ConsumerWidget {
                   child: ListView.separated(
                     padding: EdgeInsets.all(16.r),
                     itemCount: cartItems.length,
-                    separatorBuilder: (_, __) => SizedBox(height: 12.h),
+                    separatorBuilder: (context, index) => SizedBox(height: 12.h),
                     itemBuilder: (context, index) {
-                      final item = cartItems[index]; // Use index to get item
+                      final item = cartItems[index];
                       return ListTile(
                         leading: ClipRRect(
                           borderRadius: BorderRadius.circular(8.r),
-                          child: Image.network(
-                            item.product.imageUrl.isNotEmpty ? item.product.imageUrl : 'https://placehold.co/100',
-                            width: 50.w,
-                            height: 50.w,
-                            fit: BoxFit.cover,
-                             errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey, width: 50.w, height: 50.w),
-                          ),
+                          child: (item.product.imageUrl != null && item.product.imageUrl!.isNotEmpty) 
+                            ? Image.network(
+                                item.product.imageUrl!,
+                                width: 50.w,
+                                height: 50.w,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey, width: 50.w, height: 50.w),
+                              )
+                            : Container(color: Colors.grey, width: 50.w, height: 50.w),
                         ),
                         title: Text(item.product.name, style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold)),
                         subtitle: Text('${item.product.price.toStringAsFixed(2)} €', style: AppTextStyles.price),
@@ -56,12 +58,12 @@ class CartScreen extends ConsumerWidget {
                           children: [
                             IconButton(
                               icon: const Icon(Icons.remove_circle_outline),
-                              onPressed: () => ref.read(cartProvider.notifier).decreaseQuantity(item.product.id),
+                              onPressed: () => ref.read(cartProvider.notifier).removeItem(item.product.id),
                             ),
                             Text('${item.quantity}', style: AppTextStyles.labelLarge),
                             IconButton(
                               icon: const Icon(Icons.add_circle_outline),
-                              onPressed: () => ref.read(cartProvider.notifier).addProduct(item.product),
+                              onPressed: () => ref.read(cartProvider.notifier).addItem(item),
                             ),
                           ],
                         ),
@@ -71,10 +73,10 @@ class CartScreen extends ConsumerWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(24.r),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
-                      BoxShadow(color: Colors.black12, blurRadius: 10, offset: const Offset(0, -4)),
+                      BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, -4)),
                     ],
                   ),
                   child: Column(

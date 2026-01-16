@@ -24,7 +24,7 @@ class OrderHistoryScreen extends ConsumerWidget {
           return ListView.separated(
             padding: EdgeInsets.all(16.r),
             itemCount: orders.length,
-            separatorBuilder: (_, __) => SizedBox(height: 16.h),
+            separatorBuilder: (context, index) => SizedBox(height: 16.h),
             itemBuilder: (context, index) {
               final order = orders[index];
               return _OrderCard(order: order);

@@ -32,7 +32,7 @@ class MenuScreen extends ConsumerWidget {
                 'Pizzería Pepe',
                 style: AppTextStyles.displayMedium.copyWith(color: AppColors.primary),
               ),
-              background: Container(color: AppColors.background), // Could put a subtle texture here
+              background: Container(color: AppColors.background),
             ),
           ),
           
@@ -62,12 +62,12 @@ class MenuScreen extends ConsumerWidget {
             ),
           ),
           
-          SliverToBoxAdapter(child: SizedBox(height: 100.h)), // Bottom padding
+          SliverToBoxAdapter(child: SizedBox(height: 100.h)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final uri = Uri.parse("https://wa.me/34600000000"); // Replace with real number
+          final uri = Uri.parse('https://wa.me/34600000000');
           if (await canLaunchUrl(uri)) await launchUrl(uri);
         },
         backgroundColor: AppColors.accent,

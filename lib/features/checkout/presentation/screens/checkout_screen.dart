@@ -26,7 +26,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   @override
   void initState() {
     super.initState();
-    // Simulate pre-filling data from a logged-in user
     _addressController = TextEditingController(text: 'Calle Mayor 12, 3A');
     _phoneController = TextEditingController(text: '600123456');
   }
@@ -41,7 +40,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     final paymentMethod = ref.watch(selectedPaymentMethodProvider);
-    final total = ref.watch(cartTotalProvider);
+    final total = ref.read(cartProvider.notifier).subtotal;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Tramitar Pedido')),
@@ -52,7 +51,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Direction Section
               Text('📍 Dirección de Entrega', style: AppTextStyles.labelLarge),
               SizedBox(height: 8.h),
               TextFormField(
@@ -63,7 +61,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   filled: true,
                   fillColor: Colors.white,
                 ),
-                validator: (value) => value == null || value.isEmpty ? 'Por favor ignresa una dirección' : null,
+                validator: (value) => value == null || value.isEmpty ? 'Por favor ingresa una dirección' : null,
               ),
                SizedBox(height: 8.h),
               TextFormField(
@@ -80,7 +78,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               
               SizedBox(height: 24.h),
 
-              // Payment Methods
               Text('💳 Método de Pago', style: AppTextStyles.labelLarge),
               SizedBox(height: 8.h),
               Container(
@@ -120,7 +117,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
               SizedBox(height: 32.h),
 
-              // Summary
               Container(
                  padding: EdgeInsets.all(16.r),
                  decoration: BoxDecoration(
@@ -144,10 +140,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      // Create order
                       final cartItems = ref.read(cartProvider);
                       
-                      // Serialize cart items to avoid Freezed circular dependency
                       final serializedItems = cartItems.map((item) => {
                         'product': {
                           'id': item.product.id,
@@ -169,22 +163,20 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         createdAt: DateTime.now(),
                         deliveryAddress: _addressController.text,
                         contactPhone: _phoneController.text,
-                        paymentMethod: paymentMethod.name, // Convert enum to string
+                        paymentMethod: paymentMethod.name,
                       );
 
-                      // Save to Firestore
                       try {
                         final repository = ref.read(ordersRepositoryProvider);
                         await repository.createOrder(order);
                         
-                        // Clear cart and navigate
                         ref.read(cartProvider.notifier).clear();
                         if (context.mounted) {
                           context.go('/checkout/success');
                         }
                       } catch (e, stackTrace) {
-                        print('❌ ERROR saving order: $e');
-                        print('Stack trace: $stackTrace');
+                        debugPrint('❌ ERROR saving order: $e');
+                        debugPrint('Stack trace: $stackTrace');
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('Error al guardar el pedido: $e')),

@@ -1,65 +1,68 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../../features/menu/domain/entities/product.dart';
-import '../../domain/entities/cart_item.dart';
+import '../entities/cart_item.dart';
+import '../../../menu/domain/entities/product.dart';
 
-part 'cart_provider.g.dart';
+final cartProvider = StateNotifierProvider<CartNotifier, List<CartItem>>((ref) {
+  return CartNotifier();
+});
 
-@riverpod
-class Cart extends _$Cart {
-  @override
-  List<CartItem> build() => [];
+class CartNotifier extends StateNotifier<List<CartItem>> {
+  CartNotifier() : super([]);
 
-  void addProduct(Product product) {
-    // Check if optional customization should be supported later, here simple add
-    // Using indexWhere to find if it exists
-    final index = state.indexWhere((item) => item.product.id == product.id);
+  void addItem(CartItem item) {
+    final existingIndex = state.indexWhere((i) => i.product.id == item.product.id);
     
-    if (index >= 0) {
-      // Update quantity
+    if (existingIndex != -1) {
       state = [
-        ...state.sublist(0, index),
-        state[index].copyWith(quantity: state[index].quantity + 1),
-        ...state.sublist(index + 1),
+        for (int i = 0; i < state.length; i++)
+          if (i == existingIndex)
+            state[i].copyWith(quantity: state[i].quantity + 1)
+          else
+            state[i],
       ];
     } else {
-      // Add new
-      state = [...state, CartItem(product: product, quantity: 1)];
+      state = [...state, item];
     }
   }
 
-  void removeProduct(String productId) {
-     state = state.where((item) => item.product.id != productId).toList();
+  void addProduct(Product product) {
+    addItem(CartItem(product: product, quantity: 1));
+  }
+
+  void removeItem(String productId) {
+    final existingIndex = state.indexWhere((i) => i.product.id == productId);
+    
+    if (existingIndex != -1) {
+      if (state[existingIndex].quantity > 1) {
+        state = [
+          for (int i = 0; i < state.length; i++)
+            if (i == existingIndex)
+              state[i].copyWith(quantity: state[i].quantity - 1)
+            else
+              state[i],
+        ];
+      } else {
+        state = [
+          for (int i = 0; i < state.length; i++)
+            if (i != existingIndex) state[i],
+        ];
+      }
+    }
   }
 
   void decreaseQuantity(String productId) {
-     final index = state.indexWhere((item) => item.product.id == productId);
-     if (index >= 0) {
-       if (state[index].quantity > 1) {
-          state = [
-            ...state.sublist(0, index),
-            state[index].copyWith(quantity: state[index].quantity - 1),
-            ...state.sublist(index + 1),
-          ];
-       } else {
-         removeProduct(productId);
-       }
-     }
+    removeItem(productId);
   }
 
   void clear() {
     state = [];
   }
-}
 
-@riverpod
-double cartTotal(Ref ref) {
-  final cart = ref.watch(cartProvider);
-  return cart.fold(0, (sum, item) => sum + item.totalPrice);
-}
+  double get subtotal {
+    return state.fold(0.0, (sum, item) => sum + (item.product.price * item.quantity));
+  }
 
-@riverpod
-int cartItemCount(Ref ref) {
-  final cart = ref.watch(cartProvider);
-  return cart.fold(0, (sum, item) => sum + item.quantity);
+  int get totalItems {
+    return state.fold(0, (sum, item) => sum + item.quantity);
+  }
 }
