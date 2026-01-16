@@ -18,3 +18,8 @@ Stream<List<OrderEntity>> userOrders(Ref ref) {
   
   return ref.watch(ordersRepositoryProvider).getUserOrders(user.id);
 }
+
+@riverpod
+Stream<List<OrderEntity>> allOrders(Ref ref) {
+  return ref.watch(ordersRepositoryProvider).getAllOrders();
+}

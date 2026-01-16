@@ -8,6 +8,7 @@ import '../../features/checkout/presentation/screens/checkout_screen.dart';
 import '../../features/checkout/presentation/screens/order_success_screen.dart';
 import '../../features/profile/presentation/screens/order_history_screen.dart';
 import '../../features/profile/presentation/screens/my_addresses_screen.dart';
+import '../../features/admin/presentation/screens/admin_orders_screen.dart';
 import 'scaffold_with_nav_bar.dart';
 
 part 'app_router.g.dart';
@@ -76,6 +77,10 @@ GoRouter goRouter(Ref ref) {
             builder: (context, state) => const OrderSuccessScreen(),
           ),
         ],
+      ),
+      GoRoute(
+        path: '/admin',
+        builder: (context, state) => const AdminOrdersScreen(),
       ),
     ],
   );

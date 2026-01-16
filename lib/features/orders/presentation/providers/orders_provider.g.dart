@@ -95,3 +95,44 @@ final class UserOrdersProvider
 }
 
 String _$userOrdersHash() => r'32d980150b255adae9bfc4d693f67d5067d0c4fd';
+
+@ProviderFor(allOrders)
+final allOrdersProvider = AllOrdersProvider._();
+
+final class AllOrdersProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<OrderEntity>>,
+          List<OrderEntity>,
+          Stream<List<OrderEntity>>
+        >
+    with
+        $FutureModifier<List<OrderEntity>>,
+        $StreamProvider<List<OrderEntity>> {
+  AllOrdersProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'allOrdersProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$allOrdersHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<OrderEntity>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<OrderEntity>> create(Ref ref) {
+    return allOrders(ref);
+  }
+}
+
+String _$allOrdersHash() => r'5c481cf9c44fc1097689dbed7f9dad5331fc35b3';

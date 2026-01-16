@@ -17,6 +17,12 @@ class AppTextStyles {
         color: AppColors.textHigh,
       );
 
+  static TextStyle get displaySmall => GoogleFonts.lobsterTwo(
+        fontSize: 24.sp,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textHigh,
+      );
+
   // Modern Buttons & Capsules (Bebas Neue)
   static TextStyle get button => GoogleFonts.bebasNeue(
         fontSize: 18.sp,
@@ -31,7 +37,13 @@ class AppTextStyles {
         letterSpacing: 0.5,
       );
 
-  // Body Text (Montserrat/Lato - defaulting to Montserrat for clean look)
+  static TextStyle get labelMedium => GoogleFonts.bebasNeue(
+        fontSize: 16.sp,
+        color: AppColors.textMedium,
+        letterSpacing: 0.4,
+      );
+
+  // Body Text (Montserrat/Lato)
   static TextStyle get bodyLarge => GoogleFonts.montserrat(
         fontSize: 16.sp,
         color: AppColors.textHigh,
@@ -42,6 +54,12 @@ class AppTextStyles {
         fontSize: 14.sp,
         color: AppColors.textMedium,
         height: 1.4,
+      );
+
+  static TextStyle get bodySmall => GoogleFonts.montserrat(
+        fontSize: 12.sp,
+        color: AppColors.textMedium,
+        height: 1.3,
       );
 
   static TextStyle get price => GoogleFonts.montserrat(

@@ -52,6 +52,9 @@ class ProfileScreen extends ConsumerWidget {
             
             
             // Menu Options
+            if (user.email == 'admin@pepe.com')
+              _buildProfileOption(Icons.admin_panel_settings, 'Panel Admin', () => context.push('/admin')),
+            
             _buildProfileOption(Icons.history, 'Mis Pedidos', () => context.go('/profile/orders')),
             _buildProfileOption(Icons.location_on_outlined, 'Mis Direcciones', () => context.go('/profile/addresses')),
             _buildProfileOption(Icons.credit_card, 'Métodos de Pago', () {}),

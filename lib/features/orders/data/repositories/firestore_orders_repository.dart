@@ -4,6 +4,8 @@ import '../../../orders/domain/entities/order.dart';
 abstract class OrdersRepository {
   Future<void> createOrder(OrderEntity order);
   Stream<List<OrderEntity>> getUserOrders(String userId);
+  Stream<List<OrderEntity>> getAllOrders();
+  Future<void> updateOrderStatus(String orderId, String newStatus);
 }
 
 class FirestoreOrdersRepository implements OrdersRepository {
@@ -25,6 +27,24 @@ class FirestoreOrdersRepository implements OrdersRepository {
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) => OrderEntity.fromMap(doc.data())).toList();
+    });
+  }
+
+  @override
+  Stream<List<OrderEntity>> getAllOrders() {
+    return _firestore
+        .collection('orders')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) => OrderEntity.fromMap(doc.data())).toList();
+    });
+  }
+
+  @override
+  Future<void> updateOrderStatus(String orderId, String newStatus) async {
+    await _firestore.collection('orders').doc(orderId).update({
+      'status': newStatus,
     });
   }
 }
