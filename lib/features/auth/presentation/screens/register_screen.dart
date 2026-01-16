@@ -3,24 +3,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pizzeria_pepe_app/features/auth/presentation/providers/auth_provider.dart';
-import 'package:pizzeria_pepe_app/features/auth/presentation/screens/register_screen.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends ConsumerStatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
   bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Iniciar Sesión')),
+      appBar: AppBar(title: const Text('Registrarse')),
       body: Padding(
         padding: EdgeInsets.all(24.r),
         child: Column(
@@ -28,6 +28,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           children: [
             Image.asset('assets/images/logo_icon.png', height: 100.h),
             SizedBox(height: 32.h),
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: 'Nombre',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
+                prefixIcon: const Icon(Icons.person_outline),
+              ),
+            ),
+            SizedBox(height: 16.h),
             TextField(
               controller: _emailController,
               decoration: InputDecoration(
@@ -50,23 +59,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _isLoading ? null : _login,
+                onPressed: _isLoading ? null : _register,
                 style: ElevatedButton.styleFrom(minimumSize: Size(0, 50.h)),
                 child: _isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text('ENTRAR'),
+                    : const Text('CREAR CUENTA'),
               ),
-            ),
-            SizedBox(height: 16.h),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const RegisterScreen(),
-                  ),
-                );
-              },
-              child: const Text('¿No tienes cuenta? Regístrate'),
             ),
           ],
         ),
@@ -74,8 +72,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Future<void> _login() async {
-    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+  Future<void> _register() async {
+    if (_emailController.text.isEmpty || 
+        _passwordController.text.isEmpty ||
+        _nameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Por favor, rellena todos los campos')),
       );
@@ -84,27 +84,30 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     setState(() => _isLoading = true);
     try {
-      await ref.read(authProvider.notifier).login(
+      await ref.read(authProvider.notifier).register(
         _emailController.text.trim(),
         _passwordController.text.trim(),
+        _nameController.text.trim(),
       );
-      // Success is handled by the provider state change
+      if (mounted) {
+        Navigator.of(context).pop(); // Volver al login
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Cuenta creada exitosamente')),
+        );
+      }
     } catch (e) {
       if (mounted) {
-        String errorMessage = 'Error al iniciar sesión';
+        String errorMessage = 'Error al crear la cuenta';
         if (e is FirebaseAuthException) {
           switch (e.code) {
-            case 'user-not-found':
-              errorMessage = 'Usuario no encontrado';
-              break;
-            case 'wrong-password':
-              errorMessage = 'Contraseña incorrecta';
+            case 'email-already-in-use':
+              errorMessage = 'Este email ya está en uso';
               break;
             case 'invalid-email':
               errorMessage = 'Email inválido';
               break;
-            case 'user-disabled':
-              errorMessage = 'Usuario deshabilitado';
+            case 'weak-password':
+              errorMessage = 'La contraseña es muy débil';
               break;
             default:
               errorMessage = e.message ?? errorMessage;
