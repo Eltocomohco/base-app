@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../providers/cart_provider.dart';
 
 class CartScreen extends ConsumerWidget {
@@ -38,36 +39,73 @@ class CartScreen extends ConsumerWidget {
                     separatorBuilder: (context, index) => SizedBox(height: 12.h),
                     itemBuilder: (context, index) {
                       final item = cartItems[index];
-                      return ListTile(
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.r),
-                          child: (item.product.imageUrl != null && item.product.imageUrl!.isNotEmpty) 
-                            ? Image.network(
-                                item.product.imageUrl!,
-                                width: 50.w,
-                                height: 50.w,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey, width: 50.w, height: 50.w),
-                              )
-                            : Container(color: Colors.grey, width: 50.w, height: 50.w),
+                      return Container(
+                        margin: EdgeInsets.only(bottom: 12.h),
+                        padding: EdgeInsets.all(12.r),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12.r),
+                          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))],
                         ),
-                        title: Text(item.product.name, style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold)),
-                        subtitle: Text('${item.product.price.toStringAsFixed(2)} €', style: AppTextStyles.price),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.remove_circle_outline),
-                              onPressed: () => ref.read(cartProvider.notifier).removeItem(item.product.id),
+                            // Image
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8.r),
+                              child: (item.product.imageUrl.isNotEmpty)
+                                  ? Image.network(item.product.imageUrl, width: 60.w, height: 60.w, fit: BoxFit.cover, errorBuilder: (_,__,___) => Container(color: Colors.grey, width: 60.w, height: 60.w))
+                                  : Container(color: Colors.grey, width: 60.w, height: 60.w),
                             ),
-                            Text('${item.quantity}', style: AppTextStyles.labelLarge),
-                            IconButton(
-                              icon: const Icon(Icons.add_circle_outline),
-                              onPressed: () => ref.read(cartProvider.notifier).addItem(item),
+                            SizedBox(width: 12.w),
+                            // Details
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(item.product.name, style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold)),
+                                  Text('${item.pricePerUnit.toStringAsFixed(2)} €', style: AppTextStyles.price),
+                                  if (item.selectedExtras.isNotEmpty)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 4.h),
+                                      child: Text('+ ${item.selectedExtras.join(', ')}', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textLow)),
+                                    ),
+                                  if (item.notes != null && item.notes!.isNotEmpty)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 4.h),
+                                      child: Text('Nota: ${item.notes}', style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic, color: Colors.blueGrey)),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            // Quantity Controls
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.remove_circle_outline, color: AppColors.primary),
+                                      onPressed: () => ref.read(cartProvider.notifier).removeItem(item),
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                      child: Text('${item.quantity}', style: AppTextStyles.labelLarge),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.add_circle_outline, color: AppColors.primary),
+                                      onPressed: () => ref.read(cartProvider.notifier).addItem(item.copyWith(quantity: 1)),
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      );
+                      ).animate().fadeIn(duration: 400.ms).slideX(begin: 0.1, end: 0);
                     },
                   ),
                 ),

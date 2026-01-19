@@ -151,6 +151,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           'categoryId': item.product.categoryId,
                         },
                         'quantity': item.quantity,
+                        'selectedExtras': item.selectedExtras,
+                        'notes': item.notes,
+                        'pricePerUnit': item.pricePerUnit,
                       }).toList();
                       
                       final user = ref.read(authProvider);

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/cart_item.dart';
@@ -14,13 +15,17 @@ class CartNotifier extends Notifier<List<CartItem>> {
   }
 
   void addItem(CartItem item) {
-    final existingIndex = state.indexWhere((i) => i.product.id == item.product.id);
+    final existingIndex = state.indexWhere((i) => 
+      i.product.id == item.product.id && 
+      listEquals(i.selectedExtras, item.selectedExtras) && 
+      i.notes == item.notes
+    );
     
     if (existingIndex != -1) {
       state = [
         for (int i = 0; i < state.length; i++)
           if (i == existingIndex)
-            state[i].copyWith(quantity: state[i].quantity + 1)
+            state[i].copyWith(quantity: state[i].quantity + item.quantity) // Add incoming quantity usually 1
           else
             state[i],
       ];
@@ -33,8 +38,12 @@ class CartNotifier extends Notifier<List<CartItem>> {
     addItem(CartItem(product: product, quantity: 1));
   }
 
-  void removeItem(String productId) {
-    final existingIndex = state.indexWhere((i) => i.product.id == productId);
+  void removeItem(CartItem item) {
+    final existingIndex = state.indexWhere((i) => 
+      i.product.id == item.product.id && 
+      listEquals(i.selectedExtras, item.selectedExtras) && 
+      i.notes == item.notes
+    );
     
     if (existingIndex != -1) {
       if (state[existingIndex].quantity > 1) {
@@ -54,8 +63,8 @@ class CartNotifier extends Notifier<List<CartItem>> {
     }
   }
 
-  void decreaseQuantity(String productId) {
-    removeItem(productId);
+  void removeProduct(CartItem item) {
+     state = state.where((i) => i != item).toList();
   }
 
   void clear() {
@@ -78,5 +87,5 @@ final cartItemCountProvider = Provider<int>((ref) {
 
 final cartTotalProvider = Provider<double>((ref) {
   final cart = ref.watch(cartProvider);
-  return cart.fold(0.0, (sum, item) => sum + (item.product.price * item.quantity));
+  return cart.fold(0.0, (sum, item) => sum + item.totalPrice);
 });

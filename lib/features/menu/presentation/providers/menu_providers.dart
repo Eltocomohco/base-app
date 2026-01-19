@@ -32,3 +32,12 @@ Future<List<Product>> currentProducts(Ref ref) {
   final categoryId = ref.watch(selectedCategoryProvider);
   return ref.watch(menuRepositoryProvider).getProductsByCategory(categoryId);
 }
+
+@riverpod
+Future<Product?> productById(Ref ref, String id) {
+  return ref.watch(menuRepositoryProvider).getProductById(id);
+}
+@riverpod
+Future<List<Product>> productsByCategory(Ref ref, String categoryId) {
+  return ref.watch(menuRepositoryProvider).getProductsByCategory(categoryId);
+}

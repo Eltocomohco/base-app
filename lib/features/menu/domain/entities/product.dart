@@ -14,6 +14,8 @@ abstract class Product with _$Product {
     required String categoryId,
     @Default(false) bool isVegetarian,
     @Default(false) bool isSpicy,
+    @Default(true) bool available,
+    @Default([]) List<String> availableExtrasIds,
   }) = _Product;
 
   factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);

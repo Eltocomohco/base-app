@@ -15,6 +15,12 @@ _Product _$ProductFromJson(Map<String, dynamic> json) => _Product(
   categoryId: json['categoryId'] as String,
   isVegetarian: json['isVegetarian'] as bool? ?? false,
   isSpicy: json['isSpicy'] as bool? ?? false,
+  available: json['available'] as bool? ?? true,
+  availableExtrasIds:
+      (json['availableExtrasIds'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$ProductToJson(_Product instance) => <String, dynamic>{
@@ -26,4 +32,6 @@ Map<String, dynamic> _$ProductToJson(_Product instance) => <String, dynamic>{
   'categoryId': instance.categoryId,
   'isVegetarian': instance.isVegetarian,
   'isSpicy': instance.isSpicy,
+  'available': instance.available,
+  'availableExtrasIds': instance.availableExtrasIds,
 };

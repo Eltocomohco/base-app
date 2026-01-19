@@ -7,6 +7,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../providers/menu_providers.dart';
 import '../widgets/category_selector.dart';
 import '../widgets/product_card.dart';
+import '../../../../core/presentation/widgets/skeleton_card.dart';
 
 class MenuScreen extends ConsumerWidget {
   const MenuScreen({super.key});
@@ -54,8 +55,11 @@ class MenuScreen extends ConsumerWidget {
                 childCount: products.length,
               ),
             ),
-            loading: () => const SliverFillRemaining(
-              child: Center(child: CircularProgressIndicator()),
+            loading: () => SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => const SkeletonCard(),
+                childCount: 3,
+              ),
             ),
             error: (err, stack) => SliverFillRemaining(
               child: Center(child: Text('Error: $err')),

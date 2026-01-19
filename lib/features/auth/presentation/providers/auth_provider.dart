@@ -20,7 +20,8 @@ Stream<UserEntity?> authState(Ref ref) {
 class Auth extends _$Auth {
   @override
   UserEntity? build() {
-    return ref.watch(authRepositoryProvider).currentUser;
+    final userAsync = ref.watch(authStateProvider);
+    return userAsync.value;
   }
 
   Future<void> login(String email, String password) async {

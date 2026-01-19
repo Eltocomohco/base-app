@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pizzeria_pepe_app/core/theme/app_colors.dart';
 import 'package:pizzeria_pepe_app/core/theme/app_text_styles.dart';
@@ -20,6 +21,24 @@ class AdminOrdersScreen extends ConsumerWidget {
         title: Text('Panel de Administración', style: AppTextStyles.displaySmall),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
+        actions: [
+          TextButton.icon(
+            onPressed: () => context.push('/admin/notifications'),
+            icon: const Icon(Icons.notifications, color: Colors.white),
+            label: const Text('NOTIFICACIONES', style: TextStyle(color: Colors.white)),
+          ),
+          TextButton.icon(
+            onPressed: () => context.push('/admin/categories'),
+            icon: const Icon(Icons.category, color: Colors.white),
+            label: const Text('CATEGORÍAS', style: TextStyle(color: Colors.white)),
+          ),
+          TextButton.icon(
+            onPressed: () => context.push('/admin/products'),
+            icon: const Icon(Icons.inventory_2, color: Colors.white),
+            label: const Text('PRODUCTOS', style: TextStyle(color: Colors.white)),
+          ),
+          SizedBox(width: 16.w),
+        ],
       ),
       body: allOrdersAsync.when(
         data: (orders) {
@@ -71,10 +90,23 @@ class _AdminOrderCard extends ConsumerWidget {
             Text('Cliente: ${order.userId.substring(0, 8)}...', style: AppTextStyles.bodyMedium),
             Text('Fecha: $dateStr', style: AppTextStyles.bodySmall),
             const Divider(),
-            ...order.items.map((item) => Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2.h),
-                  child: Text('${item['quantity']}x ${item['product']['name']}', style: AppTextStyles.bodyMedium),
-                )),
+            ...order.items.map((item) {
+                  final extras = (item['selectedExtras'] as List<dynamic>?)?.cast<String>().join(', ');
+                  final notes = item['notes'] as String?;
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('${item['quantity']}x ${item['product']['name']}', style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.bold)),
+                        if (extras != null && extras.isNotEmpty)
+                           Text('   + $extras', style: AppTextStyles.bodySmall.copyWith(color: Colors.grey[600])),
+                        if (notes != null && notes.isNotEmpty)
+                           Text('   Nota: $notes', style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic, color: Colors.blueGrey)),
+                      ],
+                    ),
+                  );
+                }),
             const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

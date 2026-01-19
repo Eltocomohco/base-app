@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
+import '../../../notifications/presentation/services/notification_service.dart';
 
 class FirebaseAuthRepository implements AuthRepository {
   final FirebaseAuth _auth;
@@ -19,6 +21,7 @@ class FirebaseAuthRepository implements AuthRepository {
       email: email,
       password: password,
     );
+    await _saveFcmToken(credential.user?.uid);
     return _userFromFirebase(credential.user);
   }
 
@@ -29,11 +32,24 @@ class FirebaseAuthRepository implements AuthRepository {
       password: password,
     );
     await credential.user?.updateDisplayName(name);
+    await _saveFcmToken(credential.user?.uid);
     return _userFromFirebase(credential.user);
   }
 
   @override
   Future<void> signOut() => _auth.signOut();
+
+  Future<void> _saveFcmToken(String? userId) async {
+    if (userId == null) return;
+    
+    final token = NotificationService().fcmToken;
+    if (token != null) {
+      await FirebaseFirestore.instance.collection('users').doc(userId).set({
+        'fcmToken': token,
+        'tokenUpdatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    }
+  }
 
   UserEntity? _userFromFirebase(User? user) {
     if (user == null) return null;

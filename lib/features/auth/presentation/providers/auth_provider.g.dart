@@ -120,7 +120,7 @@ final class AuthProvider extends $NotifierProvider<Auth, UserEntity?> {
   }
 }
 
-String _$authHash() => r'6990113914e8c2001684227854f48b40e524906f';
+String _$authHash() => r'222905e5055655cbe8c341ccaef3434db1568d1a';
 
 abstract class _$Auth extends $Notifier<UserEntity?> {
   UserEntity? build();

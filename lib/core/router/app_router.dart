@@ -9,6 +9,12 @@ import '../../features/checkout/presentation/screens/order_success_screen.dart';
 import '../../features/profile/presentation/screens/order_history_screen.dart';
 import '../../features/profile/presentation/screens/my_addresses_screen.dart';
 import '../../features/admin/presentation/screens/admin_orders_screen.dart';
+import '../../features/menu/presentation/screens/product_detail_screen.dart';
+import '../../features/admin/presentation/screens/products/admin_product_list_screen.dart';
+import '../../features/admin/presentation/screens/products/admin_edit_product_screen.dart';
+import '../../features/admin/presentation/screens/categories/admin_categories_screen.dart';
+import '../../features/admin/presentation/screens/notifications/admin_notifications_screen.dart';
+import '../../features/admin/presentation/screens/extras/admin_extras_screen.dart';
 import 'scaffold_with_nav_bar.dart';
 
 part 'app_router.g.dart';
@@ -69,6 +75,10 @@ GoRouter goRouter(Ref ref) {
         ],
       ),
       GoRoute(
+        path: '/product/:id',
+        builder: (context, state) => ProductDetailScreen(productId: state.pathParameters['id']!),
+      ),
+      GoRoute(
         path: '/checkout',
         builder: (context, state) => const CheckoutScreen(),
         routes: [
@@ -81,6 +91,34 @@ GoRouter goRouter(Ref ref) {
       GoRoute(
         path: '/admin',
         builder: (context, state) => const AdminOrdersScreen(),
+        routes: [
+          GoRoute(
+            path: 'notifications',
+            builder: (context, state) => const AdminNotificationsScreen(),
+          ),
+          GoRoute(
+            path: 'products',
+            builder: (context, state) => const AdminProductListScreen(),
+            routes: [
+              GoRoute(
+                path: 'categories',
+                builder: (context, state) => const AdminCategoriesScreen(),
+              ),
+              GoRoute(
+                path: 'extras',
+                builder: (context, state) => const AdminExtrasScreen(),
+              ),
+              GoRoute(
+                path: 'add',
+                builder: (context, state) => const AdminEditProductScreen(),
+              ),
+              GoRoute(
+                path: 'edit/:id',
+                builder: (context, state) => AdminEditProductScreen(productId: state.pathParameters['id']),
+              ),
+            ],
+          ),
+        ],
       ),
     ],
   );

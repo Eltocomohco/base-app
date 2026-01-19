@@ -23,7 +23,11 @@ class OrderSuccessScreen extends StatelessWidget {
                   color: AppColors.success,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.check, color: Colors.white, size: 60.sp),
+                child: Icon(Icons.check, color: Colors.white, size: 60.sp)
+                    .animate()
+                    .scale(duration: 600.ms, curve: Curves.elasticOut)
+                    .then()
+                    .shimmer(duration: 1500.ms, color: Colors.white.withOpacity(0.5)),
               ).animate().scale(duration: 500.ms, curve: Curves.elasticOut),
               
               SizedBox(height: 32.h),
