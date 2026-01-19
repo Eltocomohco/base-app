@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -59,4 +56,14 @@ class DefaultFirebaseOptions {
     projectId: 'pizzeria-pepe-2026',
     storageBucket: 'pizzeria-pepe-2026.firebasestorage.app',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyB0uam3Pm7jLGyD9We9qpmpMIgQk02dYfI',
+    appId: '1:610074925216:web:fbe23904f5fec2e1c7d1c5',
+    messagingSenderId: '610074925216',
+    projectId: 'pizzeria-pepe-2026',
+    authDomain: 'pizzeria-pepe-2026.firebaseapp.com',
+    storageBucket: 'pizzeria-pepe-2026.firebasestorage.app',
+  );
+
 }

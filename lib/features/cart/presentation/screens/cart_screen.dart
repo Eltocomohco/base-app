@@ -12,7 +12,7 @@ class CartScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cartItems = ref.watch(cartProvider);
-    final total = ref.read(cartProvider.notifier).subtotal;
+    final total = ref.watch(cartTotalProvider);
 
     return Scaffold(
       appBar: AppBar(

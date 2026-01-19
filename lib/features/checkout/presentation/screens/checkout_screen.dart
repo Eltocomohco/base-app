@@ -40,7 +40,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     final paymentMethod = ref.watch(selectedPaymentMethodProvider);
-    final total = ref.read(cartProvider.notifier).subtotal;
+    final total = ref.watch(cartTotalProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Tramitar Pedido')),
