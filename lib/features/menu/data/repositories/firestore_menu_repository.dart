@@ -144,6 +144,18 @@ class FirestoreMenuRepository implements MenuRepository {
     return await snapshot.ref.getDownloadURL();
   }
 
+  @override
+  Future<void> deleteImage(String imageUrl) async {
+    if (imageUrl.isEmpty) return;
+    try {
+      final ref = FirebaseStorage.instance.refFromURL(imageUrl);
+      await ref.delete();
+    } catch (e) {
+      // Ignore errors if file not found or invalid URL
+      print('Error deleting image: $e');
+    }
+  }
+
   // Admin Methods - Extras
   @override
   Future<List<Extra>> getExtras() async {

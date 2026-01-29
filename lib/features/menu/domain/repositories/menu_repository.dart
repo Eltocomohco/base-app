@@ -14,6 +14,7 @@ abstract class MenuRepository {
   Future<void> updateProduct(Product product);
   Future<void> deleteProduct(String productId);
   Future<String> uploadProductImage(Uint8List bytes, String fileName);
+  Future<void> deleteImage(String imageUrl);
 
   Future<List<Extra>> getExtras();
   Future<void> addExtra(Extra extra);

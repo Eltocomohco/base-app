@@ -56,4 +56,16 @@ class MockMenuRepository implements MenuRepository {
 
   @override
   Future<void> deleteExtra(String extraId) async {}
+
+  @override
+  Future<void> addCategory(Category category) async {}
+
+  @override
+  Future<void> updateCategory(Category category) async {}
+
+  @override
+  Future<void> deleteCategory(String categoryId) async {}
+
+  @override
+  Future<void> deleteImage(String imageUrl) async {}
 }

@@ -127,7 +127,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                  child: Row(
                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                    children: [
-                     Text('Total a Pagar', style: AppTextStyles.displayMedium.copyWith(fontSize: 24.sp)),
+                     Expanded(child: Text('Total a Pagar', style: AppTextStyles.displayMedium.copyWith(fontSize: 24.sp))),
                      Text('${total.toStringAsFixed(2)} €', style: AppTextStyles.displayMedium.copyWith(fontSize: 24.sp, color: AppColors.primary)),
                    ],
                  ),

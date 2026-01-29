@@ -11,6 +11,7 @@ class CategorySelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categoriesAsync = ref.watch(categoriesProvider);
+    final selectedCategoryId = ref.watch(selectedCategoryProvider);
 
     return categoriesAsync.when(
       data: (categories) => SizedBox(
@@ -22,7 +23,7 @@ class CategorySelector extends ConsumerWidget {
           separatorBuilder: (context, index) => SizedBox(width: 12.w),
           itemBuilder: (context, index) {
             final category = categories[index];
-            final isSelected = category.isSelected;
+            final isSelected = category.id == selectedCategoryId;
 
             return FilterChip(
               label: Text(category.name),

@@ -89,8 +89,26 @@ class _AdminEditProductScreenState extends ConsumerState<AdminEditProductScreen>
       
       // Upload image if new one selected
       if (_imageBytes != null) {
-        final fileName = '${DateTime.now().millisecondsSinceEpoch}_${_nameController.text.replaceAll(' ', '_')}.jpg';
-        imageUrl = await ref.read(menuRepositoryProvider).uploadProductImage(_imageBytes!, fileName);
+        print('DEBUG: Image selected. Bytes: ${_imageBytes!.length}');
+        // Delete old image if exists
+        if (_currentImageUrl != null && _currentImageUrl!.isNotEmpty) {
+          print('DEBUG: Deleting old image: $_currentImageUrl');
+          await ref.read(menuRepositoryProvider).deleteImage(_currentImageUrl!);
+        }
+
+        // Sanitize filename: remove special characters, keep alphanumeric, underscores and dashes
+        final cleanName = _nameController.text.replaceAll(RegExp(r'[^a-zA-Z0-9_-]'), '');
+        final fileName = '${DateTime.now().millisecondsSinceEpoch}_$cleanName.jpg';
+        
+        print('DEBUG: Uploading new image: $fileName');
+        try {
+          imageUrl = await ref.read(menuRepositoryProvider).uploadProductImage(_imageBytes!, fileName);
+          print('DEBUG: Upload success! URL: $imageUrl');
+        } catch (e) {
+          print('DEBUG: Upload failed: $e');
+          // Re-throw to be caught by outer catch
+          rethrow;
+        }
       }
 
       final product = Product(

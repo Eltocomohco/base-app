@@ -20,4 +20,19 @@ class AppColors {
   // Status Colors
   static const Color error = Color(0xFFD32F2F);
   static const Color success = Color(0xFF388E3C);
+
+  // Premium Effects
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [primary, Color(0xFFFF4B55)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static List<BoxShadow> softShadow = [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.05),
+      blurRadius: 20,
+      offset: const Offset(0, 10),
+    ),
+  ];
 }

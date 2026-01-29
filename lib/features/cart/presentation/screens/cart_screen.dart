@@ -105,7 +105,9 @@ class CartScreen extends ConsumerWidget {
                             ),
                           ],
                         ),
-                      ).animate().fadeIn(duration: 400.ms).slideX(begin: 0.1, end: 0);
+                      ).animate()
+                        .fadeIn(duration: 400.ms, delay: (index * 80).ms)
+                        .slideX(begin: 0.2, end: 0, curve: Curves.easeOutQuad);
                     },
                   ),
                 ),

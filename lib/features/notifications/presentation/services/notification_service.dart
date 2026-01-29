@@ -59,6 +59,10 @@ class NotificationService {
 
     // Handle background messages
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
+    
+    // Subscribe to general marketing topic
+    await _fcm.subscribeToTopic('market');
+    debugPrint('📢 Subscribed to marketing topic');
   }
 
   Future<void> _handleForegroundMessage(RemoteMessage message) async {
@@ -139,6 +143,45 @@ class NotificationService {
     for (final token in tokens) {
       await sendToToken(token, title, body, data: data);
       await Future.delayed(const Duration(milliseconds: 100)); // Rate limiting
+    }
+  }
+
+  // Send to topic (Marketing)
+  Future<bool> sendToTopic(String topic, String title, String body, {Map<String, dynamic>? data}) async {
+    if (_serverKey == 'YOUR_SERVER_KEY_HERE') {
+      debugPrint('⚠️ Server key not configured. Skipping notification send.');
+      return false;
+    }
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'key=$_serverKey',
+        },
+        body: jsonEncode({
+          'to': '/topics/$topic',
+          'notification': {
+            'title': title,
+            'body': body,
+            'sound': 'default',
+          },
+          'data': data ?? {},
+          'priority': 'high',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint('✅ Broadcast sent to topic: $topic');
+        return true;
+      } else {
+        debugPrint('❌ Failed to send broadcast: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('❌ Error sending broadcast: $e');
+      return false;
     }
   }
 }

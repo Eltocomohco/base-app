@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/menu/presentation/screens/menu_screen.dart';
 import '../../features/cart/presentation/screens/cart_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
@@ -27,9 +28,13 @@ final _shellNavigatorProfileKey = GlobalKey<NavigatorState>(debugLabel: 'shellPr
 @riverpod
 GoRouter goRouter(Ref ref) {
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/splash',
     navigatorKey: _rootNavigatorKey,
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return ScaffoldWithNavBar(navigationShell: navigationShell);
