@@ -8,7 +8,7 @@ import 'package:pizzeria_pepe_app/features/menu/domain/entities/product.dart';
 import 'package:pizzeria_pepe_app/features/cart/presentation/providers/cart_provider.dart';
 
 void main() {
-  final testProduct = Product(
+  const testProduct = Product(
     id: '1',
     name: 'Pizza Carbonara',
     description: 'Nuestra deliciosa carbonara',
@@ -24,7 +24,7 @@ void main() {
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
         minTextAdapt: true,
-        builder: (context, child) => MaterialApp(
+        builder: (context, child) => const MaterialApp(
           home: Scaffold(
             body: ProductCard(product: testProduct),
           ),
@@ -57,7 +57,7 @@ void main() {
         container: container,
         child: ScreenUtilInit(
           designSize: const Size(375, 812),
-          builder: (context, child) => MaterialApp(
+          builder: (context, child) => const MaterialApp(
             home: Scaffold(
               body: ProductCard(product: testProduct),
             ),

@@ -325,3 +325,132 @@ final class ProductsByCategoryFamily extends $Family
   @override
   String toString() => r'productsByCategoryProvider';
 }
+
+@ProviderFor(allProducts)
+final allProductsProvider = AllProductsProvider._();
+
+final class AllProductsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Product>>,
+          List<Product>,
+          FutureOr<List<Product>>
+        >
+    with $FutureModifier<List<Product>>, $FutureProvider<List<Product>> {
+  AllProductsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'allProductsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$allProductsHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<Product>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<Product>> create(Ref ref) {
+    return allProducts(ref);
+  }
+}
+
+String _$allProductsHash() => r'dcfec3ca44c72966ad718f4cf3bd0c0927cd8aff';
+
+@ProviderFor(SearchQuery)
+final searchQueryProvider = SearchQueryProvider._();
+
+final class SearchQueryProvider extends $NotifierProvider<SearchQuery, String> {
+  SearchQueryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'searchQueryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$searchQueryHash();
+
+  @$internal
+  @override
+  SearchQuery create() => SearchQuery();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(String value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String>(value),
+    );
+  }
+}
+
+String _$searchQueryHash() => r'3c36752ee11b18a9f1e545eb1a7209a7222d91c9';
+
+abstract class _$SearchQuery extends $Notifier<String> {
+  String build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<String, String>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<String, String>,
+              String,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
+
+@ProviderFor(searchResults)
+final searchResultsProvider = SearchResultsProvider._();
+
+final class SearchResultsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Product>>,
+          List<Product>,
+          FutureOr<List<Product>>
+        >
+    with $FutureModifier<List<Product>>, $FutureProvider<List<Product>> {
+  SearchResultsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'searchResultsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$searchResultsHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<Product>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<Product>> create(Ref ref) {
+    return searchResults(ref);
+  }
+}
+
+String _$searchResultsHash() => r'5c8b2c480825759eff732bffb1024e950b4e7f22';

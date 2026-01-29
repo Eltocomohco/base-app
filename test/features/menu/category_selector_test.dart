@@ -51,6 +51,8 @@ class MockMenuRepository implements MenuRepository {
   Future<void> updateProduct(Product product) async {}
   @override
   Future<String> uploadProductImage(Uint8List bytes, String fileName) async => '';
+  @override
+  Future<void> deleteImage(String imageUrl) async {}
 }
 
 void main() {

@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../domain/entities/product.dart';
 import '../../presentation/providers/menu_providers.dart';
 import '../../../cart/domain/entities/cart_item.dart';
 import '../../../cart/presentation/providers/cart_provider.dart';
@@ -30,7 +29,7 @@ class ProductDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
-  List<String> _selectedExtras = [];
+  final List<String> _selectedExtras = [];
   final TextEditingController _notesController = TextEditingController();
   int _quantity = 1;
 
@@ -59,7 +58,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
       body: productAsync.when(
         data: (product) {
           if (product == null) {
-             return Center(child: Text('Producto no encontrado'));
+             return const Center(child: Text('Producto no encontrado'));
           }
           final double basePrice = product.price;
           final double extrasPrice = _selectedExtras.length * 1.0; 

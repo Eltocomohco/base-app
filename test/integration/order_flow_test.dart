@@ -38,7 +38,7 @@ class MockOrdersRepository implements OrdersRepository {
 }
 
 void main() {
-  final testProduct = Product(
+  const testProduct = Product(
     id: '1',
     name: 'Pizza Test',
     description: 'Desc',
@@ -47,7 +47,7 @@ void main() {
     categoryId: '4',
   );
 
-  final testUser = const UserEntity(id: 'user123', email: 'test@test.com', name: 'Pepe');
+  const testUser = UserEntity(id: 'user123', email: 'test@test.com', name: 'Pepe');
 
   testWidgets('Full Order Integration Flow', (WidgetTester tester) async {
     final mockOrdersRepo = MockOrdersRepository();
@@ -69,10 +69,10 @@ void main() {
         container: container,
         child: ScreenUtilInit(
           designSize: const Size(375, 812),
-          builder: (context, child) => MaterialApp(
+          builder: (context, child) => const MaterialApp(
             // Use a simple mock observer or just a plain Navigator if needed
             // But CheckoutScreen uses context.go, so we need a GoRouter
-            home: const CheckoutScreen(),
+            home: CheckoutScreen(),
           ),
         ),
       ),

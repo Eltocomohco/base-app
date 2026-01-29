@@ -101,7 +101,7 @@ class _ProductList extends ConsumerWidget {
                          // Force refresh of this category
                          ref.invalidate(productsByCategoryProvider(categoryId));
                       },
-                      activeColor: Colors.green,
+                      activeThumbColor: Colors.green,
                     ),
                     IconButton(
                       icon: const Icon(Icons.edit, color: Colors.blue),

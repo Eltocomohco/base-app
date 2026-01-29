@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pizzeria_pepe_app/core/theme/app_colors.dart';
-import 'package:pizzeria_pepe_app/core/theme/app_text_styles.dart';
 import 'package:pizzeria_pepe_app/features/menu/domain/entities/extra.dart';
 import 'package:pizzeria_pepe_app/features/menu/presentation/providers/menu_providers.dart';
 

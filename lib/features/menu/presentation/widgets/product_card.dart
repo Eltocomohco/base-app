@@ -89,6 +89,8 @@ class ProductCard extends ConsumerWidget {
                          fontSize: 24.sp,
                          height: 1.1,
                        ),
+                       maxLines: 2,
+                       overflow: TextOverflow.ellipsis,
                      ),
                     SizedBox(height: 6.h),
                     Text(

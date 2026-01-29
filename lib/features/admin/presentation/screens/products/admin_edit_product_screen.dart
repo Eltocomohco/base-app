@@ -219,7 +219,7 @@ class _AdminEditProductScreenState extends ConsumerState<AdminEditProductScreen>
               // Category Dropdown
               categoriesAsync.when(
                 data: (categories) => DropdownButtonFormField<String>(
-                  value: _selectedCategoryId,
+                  initialValue: _selectedCategoryId,
                   decoration: const InputDecoration(labelText: 'Categoría', border: OutlineInputBorder()),
                   items: categories.map((c) => DropdownMenuItem(value: c.id, child: Text(c.name))).toList(),
                   onChanged: (v) => setState(() => _selectedCategoryId = v),
